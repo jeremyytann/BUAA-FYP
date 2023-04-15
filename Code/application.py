@@ -7,8 +7,16 @@
 
 
 from PyQt6 import QtCore, QtGui, QtWidgets
+
+# --------------------------- CARLA STATUS
 from carla_status.refresh_carla_status import RefreshCarlaStatusThread
+
+# --------------------------- MAP
 from world_map.load_map import LoadMapThread
+
+# --------------------------- VEHICLE
+from vehicle.generate_vehicles import GenerateVehiclesThread
+from vehicle.remove_all_vehicles import RemoveAllVehiclesThread
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -289,14 +297,14 @@ class Ui_MainWindow(object):
         self.frame_16.setObjectName("frame_16")
         self.horizontalLayout_15 = QtWidgets.QHBoxLayout(self.frame_16)
         self.horizontalLayout_15.setObjectName("horizontalLayout_15")
-        self.car_count_slider = QtWidgets.QSlider(parent=self.frame_16)
-        self.car_count_slider.setMinimumSize(QtCore.QSize(150, 0))
-        self.car_count_slider.setMinimum(1)
-        self.car_count_slider.setMaximum(50)
-        self.car_count_slider.setOrientation(QtCore.Qt.Orientation.Horizontal)
-        self.car_count_slider.setInvertedAppearance(False)
-        self.car_count_slider.setObjectName("car_count_slider")
-        self.horizontalLayout_15.addWidget(self.car_count_slider)
+        self.vehicle_count_slider = QtWidgets.QSlider(parent=self.frame_16)
+        self.vehicle_count_slider.setMinimumSize(QtCore.QSize(150, 0))
+        self.vehicle_count_slider.setMinimum(1)
+        self.vehicle_count_slider.setMaximum(50)
+        self.vehicle_count_slider.setOrientation(QtCore.Qt.Orientation.Horizontal)
+        self.vehicle_count_slider.setInvertedAppearance(False)
+        self.vehicle_count_slider.setObjectName("vehicle_count_slider")
+        self.horizontalLayout_15.addWidget(self.vehicle_count_slider)
         self.horizontalLayout_13.addWidget(self.frame_16)
         self.frame_17 = QtWidgets.QFrame(parent=self.frame_15)
         self.frame_17.setMinimumSize(QtCore.QSize(50, 0))
@@ -305,14 +313,14 @@ class Ui_MainWindow(object):
         self.frame_17.setObjectName("frame_17")
         self.horizontalLayout_16 = QtWidgets.QHBoxLayout(self.frame_17)
         self.horizontalLayout_16.setObjectName("horizontalLayout_16")
-        self.car_slider_count_label = QtWidgets.QLabel(parent=self.frame_17)
+        self.vehicle_slider_count_label = QtWidgets.QLabel(parent=self.frame_17)
         font = QtGui.QFont()
         font.setFamily("Input Mono")
         font.setPointSize(12)
         font.setBold(True)
-        self.car_slider_count_label.setFont(font)
-        self.car_slider_count_label.setObjectName("car_slider_count_label")
-        self.horizontalLayout_16.addWidget(self.car_slider_count_label)
+        self.vehicle_slider_count_label.setFont(font)
+        self.vehicle_slider_count_label.setObjectName("vehicle_slider_count_label")
+        self.horizontalLayout_16.addWidget(self.vehicle_slider_count_label)
         self.horizontalLayout_13.addWidget(self.frame_17)
         self.frame_18 = QtWidgets.QFrame(parent=self.frame_15)
         self.frame_18.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
@@ -320,14 +328,14 @@ class Ui_MainWindow(object):
         self.frame_18.setObjectName("frame_18")
         self.horizontalLayout_14 = QtWidgets.QHBoxLayout(self.frame_18)
         self.horizontalLayout_14.setObjectName("horizontalLayout_14")
-        self.car_generate_button = QtWidgets.QPushButton(parent=self.frame_18)
-        self.car_generate_button.setMinimumSize(QtCore.QSize(100, 0))
-        self.car_generate_button.setObjectName("car_generate_button")
-        self.horizontalLayout_14.addWidget(self.car_generate_button)
-        self.car_remove_all_button = QtWidgets.QPushButton(parent=self.frame_18)
-        self.car_remove_all_button.setMinimumSize(QtCore.QSize(100, 0))
-        self.car_remove_all_button.setObjectName("car_remove_all_button")
-        self.horizontalLayout_14.addWidget(self.car_remove_all_button)
+        self.generate_vehicles_button = QtWidgets.QPushButton(parent=self.frame_18)
+        self.generate_vehicles_button.setMinimumSize(QtCore.QSize(100, 0))
+        self.generate_vehicles_button.setObjectName("generate_vehicles_button")
+        self.horizontalLayout_14.addWidget(self.generate_vehicles_button)
+        self.remove_all_vehicles_button = QtWidgets.QPushButton(parent=self.frame_18)
+        self.remove_all_vehicles_button.setMinimumSize(QtCore.QSize(100, 0))
+        self.remove_all_vehicles_button.setObjectName("remove_all_vehicles_button")
+        self.horizontalLayout_14.addWidget(self.remove_all_vehicles_button)
         self.horizontalLayout_13.addWidget(self.frame_18)
         self.verticalLayout_3.addWidget(self.frame_15, 0, QtCore.Qt.AlignmentFlag.AlignLeft)
         self.frame_35 = QtWidgets.QFrame(parent=self.frame_6)
@@ -794,26 +802,51 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(0)
-        self.car_remove_all_button.released.connect(self.car_list_widget.clear) # type: ignore
-        self.car_count_slider.valueChanged['int'].connect(self.car_slider_count_label.setNum) # type: ignore
+        self.tabWidget.setCurrentIndex(2)
+        self.remove_all_vehicles_button.released.connect(self.car_list_widget.clear) # type: ignore
+        self.vehicle_count_slider.valueChanged['int'].connect(self.vehicle_slider_count_label.setNum) # type: ignore
         self.walker_count_slider.valueChanged['int'].connect(self.walker_slider_count_label.setNum) # type: ignore
         
+        # --------------------------- CARLA STATUS
+        # Refresh Carla Status
         self.refresh_carla_status_thread = RefreshCarlaStatusThread(MainWindow=MainWindow)
         self.get_carla_status(MainWindow)
         self.carla_status_refresh_button.clicked.connect(self.get_carla_status)
-        
+
+        # --------------------------- MAP
+        # Load Map
         self.load_map_thread = LoadMapThread(MainWindow=MainWindow)
         self.load_map_button.clicked.connect(self.load_map)
+
+        # --------------------------- VEHICLE
+        # Generate Vehicles
+        self.generate_vehicles_thread = GenerateVehiclesThread(MainWindow=MainWindow)
+        self.generate_vehicles_button.clicked.connect(self.generate_vehicles)
+        # Remove All Vehicles
+        self.remove_all_vehicles_thread = RemoveAllVehiclesThread(MainWindow=MainWindow)
+        self.remove_all_vehicles_button.clicked.connect(self.remove_all_vehicles)
         
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+    # --------------------------- CARLA STATUS
+    # Refresh Carla Status
     def get_carla_status(self, MainWindow):
         self.refresh_carla_status_thread.start()
-      
+        
+    # --------------------------- MAP
+    # Load Map
     def load_map(self, MainWindow):
         self.load_map_thread.start()
-
+        
+    # --------------------------- CAR
+    # Generate Vehicles
+    def generate_vehicles(self, MainWindow):
+        self.generate_vehicles_thread.start()
+    
+    # Remove All Vehicles
+    def remove_all_vehicles(self, MainWindow):
+        self.remove_all_vehicles_thread.start()
+        
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "事故场景生成原型系统"))
@@ -830,9 +863,9 @@ class Ui_MainWindow(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "障碍物"))
         self.label_7.setText(_translate("MainWindow", "车辆"))
         self.label_8.setText(_translate("MainWindow", "生成/移除车辆"))
-        self.car_slider_count_label.setText(_translate("MainWindow", "1"))
-        self.car_generate_button.setText(_translate("MainWindow", "生成"))
-        self.car_remove_all_button.setText(_translate("MainWindow", "移除所有车辆"))
+        self.vehicle_slider_count_label.setText(_translate("MainWindow", "1"))
+        self.generate_vehicles_button.setText(_translate("MainWindow", "生成"))
+        self.remove_all_vehicles_button.setText(_translate("MainWindow", "移除所有车辆"))
         self.label_14.setText(_translate("MainWindow", "车辆列表"))
         self.label_3.setText(_translate("MainWindow", "车辆数量："))
         self.car_count_label.setText(_translate("MainWindow", "0"))
