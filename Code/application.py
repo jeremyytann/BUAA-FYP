@@ -17,6 +17,7 @@ from world_map.load_map import LoadMapThread
 # --------------------------- VEHICLE
 from vehicle.generate_vehicles import GenerateVehiclesThread
 from vehicle.remove_all_vehicles import RemoveAllVehiclesThread
+from vehicle.get_vehicle_list import GetVehicleListThread
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -368,9 +369,9 @@ class Ui_MainWindow(object):
         self.horizontalLayout_18 = QtWidgets.QHBoxLayout(self.frame_19)
         self.horizontalLayout_18.setContentsMargins(9, -1, 9, -1)
         self.horizontalLayout_18.setObjectName("horizontalLayout_18")
-        self.car_list_widget = QtWidgets.QListWidget(parent=self.frame_19)
-        self.car_list_widget.setObjectName("car_list_widget")
-        self.horizontalLayout_18.addWidget(self.car_list_widget)
+        self.vehicle_list_widget = QtWidgets.QListWidget(parent=self.frame_19)
+        self.vehicle_list_widget.setObjectName("vehicle_list_widget")
+        self.horizontalLayout_18.addWidget(self.vehicle_list_widget)
         self.horizontalLayout_17.addWidget(self.frame_19)
         self.frame_20 = QtWidgets.QFrame(parent=self.frame_14)
         self.frame_20.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
@@ -406,24 +407,24 @@ class Ui_MainWindow(object):
         self.frame_27.setObjectName("frame_27")
         self.horizontalLayout_24 = QtWidgets.QHBoxLayout(self.frame_27)
         self.horizontalLayout_24.setObjectName("horizontalLayout_24")
-        self.car_count_label = QtWidgets.QLabel(parent=self.frame_27)
+        self.vehicle_count_label = QtWidgets.QLabel(parent=self.frame_27)
         font = QtGui.QFont()
         font.setFamily("Input Mono")
         font.setPointSize(10)
-        self.car_count_label.setFont(font)
-        self.car_count_label.setObjectName("car_count_label")
-        self.horizontalLayout_24.addWidget(self.car_count_label)
+        self.vehicle_count_label.setFont(font)
+        self.vehicle_count_label.setObjectName("vehicle_count_label")
+        self.horizontalLayout_24.addWidget(self.vehicle_count_label)
         self.horizontalLayout_25.addWidget(self.frame_27)
         self.verticalLayout_4.addWidget(self.frame_23)
-        self.car_watch_button = QtWidgets.QPushButton(parent=self.frame_20)
-        self.car_watch_button.setObjectName("car_watch_button")
-        self.verticalLayout_4.addWidget(self.car_watch_button)
-        self.car_control_button = QtWidgets.QPushButton(parent=self.frame_20)
-        self.car_control_button.setObjectName("car_control_button")
-        self.verticalLayout_4.addWidget(self.car_control_button)
-        self.car_remove_button = QtWidgets.QPushButton(parent=self.frame_20)
-        self.car_remove_button.setObjectName("car_remove_button")
-        self.verticalLayout_4.addWidget(self.car_remove_button)
+        self.vehicle_watch_button = QtWidgets.QPushButton(parent=self.frame_20)
+        self.vehicle_watch_button.setObjectName("vehicle_watch_button")
+        self.verticalLayout_4.addWidget(self.vehicle_watch_button)
+        self.vehicle_control_button = QtWidgets.QPushButton(parent=self.frame_20)
+        self.vehicle_control_button.setObjectName("vehicle_control_button")
+        self.verticalLayout_4.addWidget(self.vehicle_control_button)
+        self.vehicle_remove_button = QtWidgets.QPushButton(parent=self.frame_20)
+        self.vehicle_remove_button.setObjectName("vehicle_remove_button")
+        self.verticalLayout_4.addWidget(self.vehicle_remove_button)
         self.horizontalLayout_17.addWidget(self.frame_20, 0, QtCore.Qt.AlignmentFlag.AlignTop)
         self.verticalLayout_3.addWidget(self.frame_14)
         self.horizontalLayout_10.addWidget(self.frame_6)
@@ -803,7 +804,6 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         self.tabWidget.setCurrentIndex(2)
-        self.remove_all_vehicles_button.released.connect(self.car_list_widget.clear) # type: ignore
         self.vehicle_count_slider.valueChanged['int'].connect(self.vehicle_slider_count_label.setNum) # type: ignore
         self.walker_count_slider.valueChanged['int'].connect(self.walker_slider_count_label.setNum) # type: ignore
         
@@ -822,6 +822,8 @@ class Ui_MainWindow(object):
         # Generate Vehicles
         self.generate_vehicles_thread = GenerateVehiclesThread(MainWindow=MainWindow)
         self.generate_vehicles_button.clicked.connect(self.generate_vehicles)
+        # Get Vehicle List
+        self.get_vehicle_list_thread = GetVehicleListThread(MainWindow=MainWindow)
         # Remove All Vehicles
         self.remove_all_vehicles_thread = RemoveAllVehiclesThread(MainWindow=MainWindow)
         self.remove_all_vehicles_button.clicked.connect(self.remove_all_vehicles)
@@ -842,11 +844,15 @@ class Ui_MainWindow(object):
     # Generate Vehicles
     def generate_vehicles(self, MainWindow):
         self.generate_vehicles_thread.start()
-    
+        self.get_vehicle_list_thread.start()
+
     # Remove All Vehicles
     def remove_all_vehicles(self, MainWindow):
+        if self.generate_vehicles_thread.isRunning():
+          self.generate_vehicles_thread.terminate()
+          
         self.remove_all_vehicles_thread.start()
-        
+    
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "事故场景生成原型系统"))
@@ -868,10 +874,10 @@ class Ui_MainWindow(object):
         self.remove_all_vehicles_button.setText(_translate("MainWindow", "移除所有车辆"))
         self.label_14.setText(_translate("MainWindow", "车辆列表"))
         self.label_3.setText(_translate("MainWindow", "车辆数量："))
-        self.car_count_label.setText(_translate("MainWindow", "0"))
-        self.car_watch_button.setText(_translate("MainWindow", "查看"))
-        self.car_control_button.setText(_translate("MainWindow", "控制"))
-        self.car_remove_button.setText(_translate("MainWindow", "移除"))
+        self.vehicle_count_label.setText(_translate("MainWindow", "0"))
+        self.vehicle_watch_button.setText(_translate("MainWindow", "查看"))
+        self.vehicle_control_button.setText(_translate("MainWindow", "控制"))
+        self.vehicle_remove_button.setText(_translate("MainWindow", "移除"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "车辆"))
         self.label_16.setText(_translate("MainWindow", "行人"))
         self.label_17.setText(_translate("MainWindow", "生成/移除行人"))

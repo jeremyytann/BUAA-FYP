@@ -14,7 +14,11 @@ def load_map(self, MainWindow):
 # Generate Vehicles
 def generate_vehicles(self, MainWindow):
     self.generate_vehicles_thread.start()
+    self.get_vehicle_list_thread.start()
 
 # Remove All Vehicles
 def remove_all_vehicles(self, MainWindow):
+    if self.generate_vehicles_thread.isRunning():
+      self.generate_vehicles_thread.terminate()
+      
     self.remove_all_vehicles_thread.start()

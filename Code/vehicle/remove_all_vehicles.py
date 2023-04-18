@@ -46,3 +46,5 @@ class RemoveAllVehiclesThread(QThread):
         os.remove("generate_vehicles_script.py")
       
       self.MainWindow.ui.generate_vehicles_button.setEnabled(True)
+      self.MainWindow.ui.vehicle_list_widget.clear()
+      self.MainWindow.ui.vehicle_count_label.setText("0")

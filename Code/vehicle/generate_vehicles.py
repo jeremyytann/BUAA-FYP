@@ -1,6 +1,7 @@
 import subprocess
 import os
 from PyQt6.QtCore import QThread
+from vehicle.get_vehicle_list import GetVehicleListThread
 
 vehicle_count = 0
 
@@ -17,6 +18,7 @@ client.set_timeout(10.0)
 synchronous_master = False
 
 vehicles_list = []
+
 world = client.get_world()
 
 traffic_manager = client.get_trafficmanager(8000)
@@ -60,8 +62,6 @@ for n, transform in enumerate(spawn_points):
     .then(SetAutopilot(FutureActor, True, traffic_manager.get_port())))
   
 client.apply_batch_sync(batch, synchronous_master)
-
-print('Generated {vehicle_count} vehicles.')
 
 traffic_manager.global_percentage_speed_difference(25.0)
 
