@@ -42,6 +42,9 @@ class GetWalkerListThread(QThread):
       walker_list_count = self.MainWindow.ui.walker_list_widget.count()
       
       self.MainWindow.ui.walker_count_label.setText(str(walker_list_count))
+      
+      if walker_list_count > 0:
+        self.MainWindow.ui.generate_walkers_button.setEnabled(False)
     except KeyboardInterrupt:
       pass
     finally:

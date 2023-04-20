@@ -40,6 +40,9 @@ class GetVehicleListThread(QThread):
       vehicle_list_count = self.MainWindow.ui.vehicle_list_widget.count()
       
       self.MainWindow.ui.vehicle_count_label.setText(str(vehicle_list_count))
+      
+      if vehicle_list_count > 0:
+        self.MainWindow.ui.generate_vehicles_button.setEnabled(False)
     except KeyboardInterrupt:
       pass
     finally:

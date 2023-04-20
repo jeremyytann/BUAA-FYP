@@ -829,6 +829,7 @@ class Ui_MainWindow(object):
         self.generate_vehicles_button.clicked.connect(self.generate_vehicles)
         # Get Vehicle List
         self.get_vehicle_list_thread = GetVehicleListThread(MainWindow=MainWindow)
+        self.get_vehicle_list_thread.start()
         # Remove All Vehicles
         self.remove_all_vehicles_thread = RemoveAllVehiclesThread(MainWindow=MainWindow)
         self.remove_all_vehicles_button.clicked.connect(self.remove_all_vehicles)
@@ -838,7 +839,8 @@ class Ui_MainWindow(object):
         self.generate_walkers_thread = GenerateWalkersThread(MainWindow=MainWindow)
         self.generate_walkers_button.clicked.connect(self.generate_walkers)
         # Get Vehicle List
-        self.get_walker_list_thread = GetWalkerListThread(MainWindow=MainWindow)        
+        self.get_walker_list_thread = GetWalkerListThread(MainWindow=MainWindow)
+        self.get_walker_list_thread.start()
         # Remove All Walkers
         self.remove_all_walkers_thread = RemoveAllWalkersThread(MainWindow=MainWindow)
         self.remove_all_walkers_button.clicked.connect(self.remove_all_walkers)
