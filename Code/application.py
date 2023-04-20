@@ -19,6 +19,11 @@ from vehicle.generate_vehicles import GenerateVehiclesThread
 from vehicle.remove_all_vehicles import RemoveAllVehiclesThread
 from vehicle.get_vehicle_list import GetVehicleListThread
 
+# --------------------------- WALKER
+from walker.generate_walkers import GenerateWalkersThread
+from walker.remove_all_walkers import RemoveAllWalkersThread
+from walker.get_walker_list import GetWalkerListThread
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -514,14 +519,14 @@ class Ui_MainWindow(object):
         self.frame_47.setObjectName("frame_47")
         self.horizontalLayout_44 = QtWidgets.QHBoxLayout(self.frame_47)
         self.horizontalLayout_44.setObjectName("horizontalLayout_44")
-        self.walker_generate_button = QtWidgets.QPushButton(parent=self.frame_47)
-        self.walker_generate_button.setMinimumSize(QtCore.QSize(100, 0))
-        self.walker_generate_button.setObjectName("walker_generate_button")
-        self.horizontalLayout_44.addWidget(self.walker_generate_button)
-        self.walker_remove_all_button = QtWidgets.QPushButton(parent=self.frame_47)
-        self.walker_remove_all_button.setMinimumSize(QtCore.QSize(100, 0))
-        self.walker_remove_all_button.setObjectName("walker_remove_all_button")
-        self.horizontalLayout_44.addWidget(self.walker_remove_all_button)
+        self.generate_walkers_button = QtWidgets.QPushButton(parent=self.frame_47)
+        self.generate_walkers_button.setMinimumSize(QtCore.QSize(100, 0))
+        self.generate_walkers_button.setObjectName("generate_walkers_button")
+        self.horizontalLayout_44.addWidget(self.generate_walkers_button)
+        self.remove_all_walkers_button = QtWidgets.QPushButton(parent=self.frame_47)
+        self.remove_all_walkers_button.setMinimumSize(QtCore.QSize(100, 0))
+        self.remove_all_walkers_button.setObjectName("remove_all_walkers_button")
+        self.horizontalLayout_44.addWidget(self.remove_all_walkers_button)
         self.horizontalLayout_38.addWidget(self.frame_47)
         self.verticalLayout_6.addWidget(self.frame_42, 0, QtCore.Qt.AlignmentFlag.AlignLeft)
         self.frame_44 = QtWidgets.QFrame(parent=self.frame_36)
@@ -803,7 +808,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(3)
         self.vehicle_count_slider.valueChanged['int'].connect(self.vehicle_slider_count_label.setNum) # type: ignore
         self.walker_count_slider.valueChanged['int'].connect(self.walker_slider_count_label.setNum) # type: ignore
         
@@ -827,6 +832,16 @@ class Ui_MainWindow(object):
         # Remove All Vehicles
         self.remove_all_vehicles_thread = RemoveAllVehiclesThread(MainWindow=MainWindow)
         self.remove_all_vehicles_button.clicked.connect(self.remove_all_vehicles)
+
+        # --------------------------- WALKER
+        # Generate Walkers
+        self.generate_walkers_thread = GenerateWalkersThread(MainWindow=MainWindow)
+        self.generate_walkers_button.clicked.connect(self.generate_walkers)
+        # Get Vehicle List
+        self.get_walker_list_thread = GetWalkerListThread(MainWindow=MainWindow)        
+        # Remove All Walkers
+        self.remove_all_walkers_thread = RemoveAllWalkersThread(MainWindow=MainWindow)
+        self.remove_all_walkers_button.clicked.connect(self.remove_all_walkers)
         
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -840,7 +855,7 @@ class Ui_MainWindow(object):
     def load_map(self, MainWindow):
         self.load_map_thread.start()
         
-    # --------------------------- CAR
+    # --------------------------- VEHICLE
     # Generate Vehicles
     def generate_vehicles(self, MainWindow):
         self.generate_vehicles_thread.start()
@@ -852,6 +867,19 @@ class Ui_MainWindow(object):
           self.generate_vehicles_thread.terminate()
           
         self.remove_all_vehicles_thread.start()
+        
+    # --------------------------- WALKER
+    # Generate Walkers
+    def generate_walkers(self, MainWindow):
+        self.generate_walkers_thread.start()
+        self.get_walker_list_thread.start()
+    
+    # Remove All Walkers  
+    def remove_all_walkers(self, MainWindow):
+        if self.generate_walkers_thread.isRunning():
+          self.generate_walkers_thread.terminate()
+        
+        self.remove_all_walkers_thread.start()
     
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -882,8 +910,8 @@ class Ui_MainWindow(object):
         self.label_16.setText(_translate("MainWindow", "行人"))
         self.label_17.setText(_translate("MainWindow", "生成/移除行人"))
         self.walker_slider_count_label.setText(_translate("MainWindow", "1"))
-        self.walker_generate_button.setText(_translate("MainWindow", "生成"))
-        self.walker_remove_all_button.setText(_translate("MainWindow", "移除所有行人"))
+        self.generate_walkers_button.setText(_translate("MainWindow", "生成"))
+        self.remove_all_walkers_button.setText(_translate("MainWindow", "移除所有行人"))
         self.label_19.setText(_translate("MainWindow", "行人列表"))
         self.label_4.setText(_translate("MainWindow", "行人数量："))
         self.walker_count_label.setText(_translate("MainWindow", "0"))

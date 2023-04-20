@@ -5,19 +5,14 @@ from PyQt6.QtCore import QThread
 script_code = """
 import carla
 
-# Connect to the Carla simulator
 client = carla.Client('localhost', 2000)
 client.set_timeout(5.0)
-
-# Get the world object
 world = client.get_world()
 
-# Get all the vehicles in the world
 vehicle_list = world.get_actors().filter('vehicle.*')
 
 output = ''
 
-# Print the ids of all the vehicles
 for vehicle in vehicle_list:
     output = output + str(vehicle.id) + "-" + vehicle.type_id + " "
     

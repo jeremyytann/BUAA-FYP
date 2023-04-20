@@ -10,3 +10,8 @@ from world_map.load_map import LoadMapThread
 from vehicle.generate_vehicles import GenerateVehiclesThread
 from vehicle.remove_all_vehicles import RemoveAllVehiclesThread
 from vehicle.get_vehicle_list import GetVehicleListThread
+
+# --------------------------- WALKER
+from walker.generate_walkers import GenerateWalkersThread
+from walker.remove_all_walkers import RemoveAllWalkersThread
+from walker.get_walker_list import GetWalkerListThread

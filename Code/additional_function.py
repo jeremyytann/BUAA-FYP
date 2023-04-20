@@ -10,7 +10,7 @@ def get_carla_status(self, MainWindow):
 def load_map(self, MainWindow):
     self.load_map_thread.start()
     
-# --------------------------- CAR
+# --------------------------- VEHICLE
 # Generate Vehicles
 def generate_vehicles(self, MainWindow):
     self.generate_vehicles_thread.start()
@@ -22,3 +22,16 @@ def remove_all_vehicles(self, MainWindow):
       self.generate_vehicles_thread.terminate()
       
     self.remove_all_vehicles_thread.start()
+    
+# --------------------------- WALKER
+# Generate Walkers
+def generate_walkers(self, MainWindow):
+    self.generate_walkers_thread.start()
+    self.get_walker_list_thread.start()
+
+# Remove All Walkers  
+def remove_all_walkers(self, MainWindow):
+    if self.generate_walkers_thread.isRunning():
+      self.generate_walkers_thread.terminate()
+    
+    self.remove_all_walkers_thread.start()
