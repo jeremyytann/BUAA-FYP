@@ -24,6 +24,18 @@ from walker.generate_walkers import GenerateWalkersThread
 from walker.remove_all_walkers import RemoveAllWalkersThread
 from walker.get_walker_list import GetWalkerListThread
 
+# --------------------------- WEATHER
+from weather.fog_none import FogNoneThread
+from weather.fog_light import FogLightThread
+from weather.fog_heavy import FogHeavyThread
+from weather.rain_none import RainNoneThread
+from weather.rain_light import RainLightThread
+from weather.rain_heavy import RainHeavyThread
+from weather.time_morning import TimeMorningThread
+from weather.time_noon import TimeNoonThread
+from weather.time_evening import TimeEveningThread
+from weather.time_night import TimeNightThread
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -808,20 +820,20 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(3)
+        self.tabWidget.setCurrentIndex(4)
         self.vehicle_count_slider.valueChanged['int'].connect(self.vehicle_slider_count_label.setNum) # type: ignore
         self.walker_count_slider.valueChanged['int'].connect(self.walker_slider_count_label.setNum) # type: ignore
         
         # --------------------------- CARLA STATUS
         # Refresh Carla Status
         self.refresh_carla_status_thread = RefreshCarlaStatusThread(MainWindow=MainWindow)
-        self.get_carla_status(MainWindow)
-        self.carla_status_refresh_button.clicked.connect(self.get_carla_status)
+        self.refresh_carla_status_thread.start()
+        self.carla_status_refresh_button.clicked.connect(self.refresh_carla_status_thread.start)
 
         # --------------------------- MAP
         # Load Map
         self.load_map_thread = LoadMapThread(MainWindow=MainWindow)
-        self.load_map_button.clicked.connect(self.load_map)
+        self.load_map_button.clicked.connect(self.load_map_thread.start)
 
         # --------------------------- VEHICLE
         # Generate Vehicles
@@ -844,19 +856,41 @@ class Ui_MainWindow(object):
         # Remove All Walkers
         self.remove_all_walkers_thread = RemoveAllWalkersThread(MainWindow=MainWindow)
         self.remove_all_walkers_button.clicked.connect(self.remove_all_walkers)
+
+        # --------------------------- WEATHER
+        # Fog None
+        self.fog_none_thread = FogNoneThread(MainWindow=MainWindow)
+        self.fog_none_button.clicked.connect(self.fog_none_thread.start)
+        # Fog Light
+        self.fog_light_thread = FogLightThread(MainWindow=MainWindow)
+        self.fog_light_button.clicked.connect(self.fog_light_thread.start)
+        # Fog Heavy
+        self.fog_heavy_thread = FogHeavyThread(MainWindow=MainWindow)
+        self.fog_heavy_button.clicked.connect(self.fog_heavy_thread.start)
+        # Rain None
+        self.rain_none_thread = RainNoneThread(MainWindow=MainWindow)
+        self.rain_none_button.clicked.connect(self.rain_none_thread.start)
+        # Rain Light
+        self.rain_light_thread = RainLightThread(MainWindow=MainWindow)
+        self.rain_light_button.clicked.connect(self.rain_light_thread.start)
+        # Rain Heavy
+        self.rain_heavy_thread = RainHeavyThread(MainWindow=MainWindow)
+        self.rain_heavy_button.clicked.connect(self.rain_heavy_thread.start)
+        # Time Morning
+        self.time_morning_thread = TimeMorningThread(MainWindow=MainWindow)
+        self.time_morning_button.clicked.connect(self.time_morning_thread.start)
+        # Time Noon
+        self.time_noon_thread = TimeNoonThread(MainWindow=MainWindow)
+        self.time_noon_button.clicked.connect(self.time_noon_thread.start)
+        # Time Evening
+        self.time_evening_thread = TimeEveningThread(MainWindow=MainWindow)
+        self.time_evening_button.clicked.connect(self.time_evening_thread.start)
+        # Time Night
+        self.time_night_thread = TimeNightThread(MainWindow=MainWindow)
+        self.time_night_button.clicked.connect(self.time_night_thread.start)
         
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-    # --------------------------- CARLA STATUS
-    # Refresh Carla Status
-    def get_carla_status(self, MainWindow):
-        self.refresh_carla_status_thread.start()
-        
-    # --------------------------- MAP
-    # Load Map
-    def load_map(self, MainWindow):
-        self.load_map_thread.start()
-        
     # --------------------------- VEHICLE
     # Generate Vehicles
     def generate_vehicles(self, MainWindow):
@@ -875,7 +909,7 @@ class Ui_MainWindow(object):
     def generate_walkers(self, MainWindow):
         self.generate_walkers_thread.start()
         self.get_walker_list_thread.start()
-    
+
     # Remove All Walkers  
     def remove_all_walkers(self, MainWindow):
         if self.generate_walkers_thread.isRunning():

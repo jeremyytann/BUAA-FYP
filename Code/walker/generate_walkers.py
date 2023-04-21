@@ -46,8 +46,6 @@ while len(spawn_points) < num_walkers * 2:
 
 SpawnActor = carla.command.SpawnActor
 
-print(len(spawn_points))
-
 # Spawn walkers
 batch = []
 walker_speed = []
@@ -55,7 +53,6 @@ random.shuffle(spawn_points)
 
 for spawn_point in spawn_points:
   if len(batch) == num_walkers:
-    print(len(batch))
     break
 
   blueprint = random.choice(blueprints)
@@ -69,47 +66,6 @@ for spawn_point in spawn_points:
   batch.append(SpawnActor(blueprint, spawn_point))
   
 results = client.apply_batch_sync(batch, True)
-
-# new_walker_speed = []
-
-# for i in range(len(results)):
-#   if results[i].error:
-#     print(results[i].error)
-#   else:
-#     walkers_list.append({{"id": results[i].actor_id}})
-#     new_walker_speed.append(walker_speed[i])
-  
-# walker_speed = new_walker_speed
-
-# batch = []
-# all_id = []
-# blueprint_controller = world.get_blueprint_library().find('controller.ai.walker')
-
-# for i in range(len(walkers_list)):
-#   batch.append(SpawnActor(blueprint_controller, carla.Transform(), walkers_list[i]["id"]))
-
-# results = client.apply_batch_sync(batch, True)
-
-# for i in range(len(results)):
-#   if results[i].error:
-#     print(results[i].error)
-#   else:
-#     walkers_list[i]["con"] = results[i].actor_id
-
-# for i in range(len(walkers_list)):
-#   all_id.append(walkers_list[i]["con"])
-#   all_id.append(walkers_list[i]["id"])
-# all_actors = world.get_actors(all_id)
-  
-# for i in range(0, len(all_id), 2):
-#   all_actors[i].start()
-#   all_actors[i].go_to_location(world.get_random_location_from_navigation())
-#   all_actors[i].set_max_speed(float(walker_speed[int(i/2)]))
-
-# traffic_manager.global_percentage_speed_difference(30.0)
-
-# while True:
-#   world.tick()
 """
 
 class GenerateWalkersThread(QThread):

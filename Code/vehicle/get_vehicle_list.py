@@ -35,6 +35,7 @@ class GetVehicleListThread(QThread):
       outputs = output.split(' ')
       
       for vehicle_name in outputs:
+        if len(vehicle_name) > 0:
           self.MainWindow.ui.vehicle_list_widget.addItem(vehicle_name)
       
       vehicle_list_count = self.MainWindow.ui.vehicle_list_widget.count()

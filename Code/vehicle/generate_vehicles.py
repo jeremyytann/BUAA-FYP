@@ -41,7 +41,6 @@ SpawnActor = carla.command.SpawnActor
 SetAutopilot = carla.command.SetAutopilot
 FutureActor = carla.command.FutureActor
 
-# Spawn vehicles
 batch = []
 random.shuffle(spawn_points)
 
