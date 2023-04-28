@@ -14,13 +14,20 @@ def main():
         client.set_timeout(5)
         world = client.get_world()
         world_map = world.get_map()
-        
         available_maps = client.get_available_maps()
         
-        output = 'CARLA Simulator connected' + '-' + world_map.name + '.'
+        blueprint_library = world.get_blueprint_library()
+        static_props = blueprint_library.filter('static.prop.*')
+        
+        output = 'CARLA Simulator connected' + '-' + world_map.name + ','
         
         for map_name in available_maps:
             output += map_name + ' '
+            
+        output += ','
+        
+        for static_prop in static_props:
+            output += static_prop.id + ' '
         
         print(output)
     except RuntimeError:
@@ -48,12 +55,19 @@ class RefreshCarlaStatusThread(QThread):
       output = result.stdout.strip()
       
       if "CARLA Simulator connected" in output:
-        outputs = output.split('.')
+        outputs = output.split(',')
         map_name = outputs[0].split('-')[1]
         available_maps = outputs[1].split(' ')
+        static_props = outputs[2].split(' ')
+        
+        self.MainWindow.ui.map_list_widget.clear()
+        self.MainWindow.ui.props_list_widget.clear()
         
         for map in available_maps:
             self.MainWindow.ui.map_list_widget.addItem(map)
+            
+        for static_prop in static_props:
+            self.MainWindow.ui.props_list_widget.addItem(static_prop)
         
         self.MainWindow.ui.carla_status_label.setText("已连接")
         self.MainWindow.ui.current_map_label.setText(map_name)
@@ -61,6 +75,7 @@ class RefreshCarlaStatusThread(QThread):
         self.MainWindow.ui.carla_status_label.setText("未连接")
         self.MainWindow.ui.current_map_label.setText("None")
         self.MainWindow.ui.map_list_widget.clear()
+        self.MainWindow.ui.props_list_widget.clear()
     except KeyboardInterrupt:
       pass
     finally:

@@ -34,8 +34,6 @@ class GetWalkerListThread(QThread):
       
       outputs = output.split(' ')
       
-      print(outputs)
-      
       for walker_name in outputs:
         if len(walker_name) > 0:
           self.MainWindow.ui.walker_list_widget.addItem(walker_name)
