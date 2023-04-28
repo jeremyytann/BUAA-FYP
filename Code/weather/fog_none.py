@@ -12,7 +12,7 @@ world = client.get_world()
 current_weather = world.get_weather()
 
 weather = carla.WeatherParameters(
-  fog_density=0.0,
+  fog_density = 0.0,
   precipitation = current_weather.precipitation,
   sun_altitude_angle = current_weather.sun_altitude_angle,
 )

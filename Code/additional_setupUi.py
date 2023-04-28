@@ -64,3 +64,7 @@ self.time_evening_button.clicked.connect(self.time_evening_thread.start)
 # Time Night
 self.time_night_thread = TimeNightThread(MainWindow=MainWindow)
 self.time_night_button.clicked.connect(self.time_night_thread.start)
+
+# Manual Weather
+self.manual_weather_thread = ManualWeatherThread(MainWindow=MainWindow)
+self.manual_weather_button.clicked.connect(self.manual_weather_thread.start)

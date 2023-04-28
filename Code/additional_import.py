@@ -27,3 +27,4 @@ from weather.time_morning import TimeMorningThread
 from weather.time_noon import TimeNoonThread
 from weather.time_evening import TimeEveningThread
 from weather.time_night import TimeNightThread
+from weather.manual_weather import ManualWeatherThread
