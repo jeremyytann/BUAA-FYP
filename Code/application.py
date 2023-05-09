@@ -13,16 +13,29 @@ from carla_status.refresh_carla_status import RefreshCarlaStatusThread
 
 # --------------------------- MAP
 from world_map.load_map import LoadMapThread
+from world_map.reload_world import ReloadWorldThread
+
+# --------------------------- PROP
+from prop.generate_prop import GeneratePropThread
+from prop.get_prop_list import GetPropListThread
+from prop.view_selected_prop import ViewSelectedPropThread
+from prop.remove_selected_prop import RemoveSelectedPropThread
+from prop.prop_rotate_left import PropRotateLeftThread
+from prop.prop_rotate_right import PropRotateRightThread
 
 # --------------------------- VEHICLE
 from vehicle.generate_vehicles import GenerateVehiclesThread
 from vehicle.remove_all_vehicles import RemoveAllVehiclesThread
 from vehicle.get_vehicle_list import GetVehicleListThread
+from vehicle.view_selected_vehicle import ViewSelectedVehicleThread
+from vehicle.remove_selected_vehicle import RemoveSelectedVehicleThread
 
 # --------------------------- WALKER
 from walker.generate_walkers import GenerateWalkersThread
 from walker.remove_all_walkers import RemoveAllWalkersThread
 from walker.get_walker_list import GetWalkerListThread
+from walker.view_selected_walker import ViewSelectedWalkerThread
+from walker.remove_selected_walker import RemoveSelectedWalkerThread
 
 # --------------------------- WEATHER
 from weather.fog_none import FogNoneThread
@@ -211,6 +224,9 @@ class Ui_MainWindow(object):
         self.load_map_button = QtWidgets.QPushButton(parent=self.frame_32)
         self.load_map_button.setObjectName("load_map_button")
         self.verticalLayout_11.addWidget(self.load_map_button)
+        self.reload_world_button = QtWidgets.QPushButton(parent=self.frame_32)
+        self.reload_world_button.setObjectName("reload_world_button")
+        self.verticalLayout_11.addWidget(self.reload_world_button)
         self.horizontalLayout_26.addWidget(self.frame_32, 0, QtCore.Qt.AlignmentFlag.AlignTop)
         self.verticalLayout_5.addWidget(self.frame_29)
         self.frame_30 = QtWidgets.QFrame(parent=self.frame_2)
@@ -284,6 +300,14 @@ class Ui_MainWindow(object):
         self.horizontalLayout_69 = QtWidgets.QHBoxLayout(self.frame_76)
         self.horizontalLayout_69.setContentsMargins(-1, 0, -1, 0)
         self.horizontalLayout_69.setObjectName("horizontalLayout_69")
+        self.label_13 = QtWidgets.QLabel(parent=self.frame_76)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑")
+        font.setPointSize(12)
+        font.setBold(True)
+        self.label_13.setFont(font)
+        self.label_13.setObjectName("label_13")
+        self.horizontalLayout_69.addWidget(self.label_13)
         self.label_10 = QtWidgets.QLabel(parent=self.frame_76)
         font = QtGui.QFont()
         font.setFamily("微软雅黑")
@@ -292,7 +316,7 @@ class Ui_MainWindow(object):
         self.label_10.setFont(font)
         self.label_10.setObjectName("label_10")
         self.horizontalLayout_69.addWidget(self.label_10)
-        self.verticalLayout_14.addWidget(self.frame_76)
+        self.verticalLayout_14.addWidget(self.frame_76, 0, QtCore.Qt.AlignmentFlag.AlignTop)
         self.frame_77 = QtWidgets.QFrame(parent=self.frame_4)
         self.frame_77.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
         self.frame_77.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
@@ -310,8 +334,7 @@ class Ui_MainWindow(object):
         self.props_list_widget = QtWidgets.QListWidget(parent=self.frame_78)
         self.props_list_widget.setObjectName("props_list_widget")
         self.horizontalLayout_71.addWidget(self.props_list_widget)
-        self.horizontalLayout_70.addWidget(self.frame_78)
-        self.frame_79 = QtWidgets.QFrame(parent=self.frame_77)
+        self.frame_79 = QtWidgets.QFrame(parent=self.frame_78)
         self.frame_79.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
         self.frame_79.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
         self.frame_79.setObjectName("frame_79")
@@ -320,7 +343,38 @@ class Ui_MainWindow(object):
         self.prop_generate_button = QtWidgets.QPushButton(parent=self.frame_79)
         self.prop_generate_button.setObjectName("prop_generate_button")
         self.verticalLayout_13.addWidget(self.prop_generate_button)
-        self.horizontalLayout_70.addWidget(self.frame_79, 0, QtCore.Qt.AlignmentFlag.AlignTop)
+        self.horizontalLayout_71.addWidget(self.frame_79, 0, QtCore.Qt.AlignmentFlag.AlignTop)
+        self.frame_80 = QtWidgets.QFrame(parent=self.frame_78)
+        self.frame_80.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.frame_80.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
+        self.frame_80.setObjectName("frame_80")
+        self.horizontalLayout_72 = QtWidgets.QHBoxLayout(self.frame_80)
+        self.horizontalLayout_72.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_72.setObjectName("horizontalLayout_72")
+        self.existing_props_list_widget = QtWidgets.QListWidget(parent=self.frame_80)
+        self.existing_props_list_widget.setObjectName("existing_props_list_widget")
+        self.horizontalLayout_72.addWidget(self.existing_props_list_widget)
+        self.horizontalLayout_71.addWidget(self.frame_80)
+        self.frame_81 = QtWidgets.QFrame(parent=self.frame_78)
+        self.frame_81.setFrameShape(QtWidgets.QFrame.Shape.StyledPanel)
+        self.frame_81.setFrameShadow(QtWidgets.QFrame.Shadow.Raised)
+        self.frame_81.setObjectName("frame_81")
+        self.verticalLayout_15 = QtWidgets.QVBoxLayout(self.frame_81)
+        self.verticalLayout_15.setObjectName("verticalLayout_15")
+        self.props_watch_button = QtWidgets.QPushButton(parent=self.frame_81)
+        self.props_watch_button.setObjectName("props_watch_button")
+        self.verticalLayout_15.addWidget(self.props_watch_button)
+        self.props_rotate_left_button = QtWidgets.QPushButton(parent=self.frame_81)
+        self.props_rotate_left_button.setObjectName("props_rotate_left_button")
+        self.verticalLayout_15.addWidget(self.props_rotate_left_button)
+        self.props_rotate_right_button = QtWidgets.QPushButton(parent=self.frame_81)
+        self.props_rotate_right_button.setObjectName("props_rotate_right_button")
+        self.verticalLayout_15.addWidget(self.props_rotate_right_button)
+        self.props_remove_button = QtWidgets.QPushButton(parent=self.frame_81)
+        self.props_remove_button.setObjectName("props_remove_button")
+        self.verticalLayout_15.addWidget(self.props_remove_button)
+        self.horizontalLayout_71.addWidget(self.frame_81, 0, QtCore.Qt.AlignmentFlag.AlignTop)
+        self.horizontalLayout_70.addWidget(self.frame_78)
         self.verticalLayout_14.addWidget(self.frame_77)
         self.horizontalLayout_8.addWidget(self.frame_4)
         self.tabWidget.addTab(self.tab, "")
@@ -499,12 +553,13 @@ class Ui_MainWindow(object):
         self.vehicle_watch_button = QtWidgets.QPushButton(parent=self.frame_20)
         self.vehicle_watch_button.setObjectName("vehicle_watch_button")
         self.verticalLayout_4.addWidget(self.vehicle_watch_button)
-        self.vehicle_control_button = QtWidgets.QPushButton(parent=self.frame_20)
-        self.vehicle_control_button.setObjectName("vehicle_control_button")
-        self.verticalLayout_4.addWidget(self.vehicle_control_button)
         self.vehicle_remove_button = QtWidgets.QPushButton(parent=self.frame_20)
         self.vehicle_remove_button.setObjectName("vehicle_remove_button")
         self.verticalLayout_4.addWidget(self.vehicle_remove_button)
+        self.vehicle_generate_control_button = QtWidgets.QPushButton(parent=self.frame_20)
+        self.vehicle_generate_control_button.setMinimumSize(QtCore.QSize(100, 0))
+        self.vehicle_generate_control_button.setObjectName("vehicle_generate_control_button")
+        self.verticalLayout_4.addWidget(self.vehicle_generate_control_button)
         self.horizontalLayout_17.addWidget(self.frame_20, 0, QtCore.Qt.AlignmentFlag.AlignTop)
         self.verticalLayout_3.addWidget(self.frame_14)
         self.horizontalLayout_10.addWidget(self.frame_6)
@@ -1065,7 +1120,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(4)
+        self.tabWidget.setCurrentIndex(1)
         self.vehicle_count_slider.valueChanged['int'].connect(self.vehicle_slider_count_label.setNum) # type: ignore
         self.walker_count_slider.valueChanged['int'].connect(self.walker_slider_count_label.setNum) # type: ignore
         self.rain_slider.valueChanged['int'].connect(self.rain_slider_label.setNum) # type: ignore
@@ -1082,6 +1137,28 @@ class Ui_MainWindow(object):
         # Load Map
         self.load_map_thread = LoadMapThread(MainWindow=MainWindow)
         self.load_map_button.clicked.connect(self.load_map_thread.start)
+        self.reload_world_thread = ReloadWorldThread(MainWindow=MainWindow)
+        self.reload_world_button.clicked.connect(self.reload_world_thread.start)
+
+        # --------------------------- PROP
+        # Generate Prop
+        self.generate_prop_thread = GeneratePropThread(MainWindow=MainWindow)
+        self.prop_generate_button.clicked.connect(self.generate_prop_thread.start)
+        # Get Prop List
+        self.get_prop_list_thread = GetPropListThread(MainWindow=MainWindow)
+        self.get_prop_list_thread.start()
+        # View Selected Prop
+        self.view_selected_prop_thread = ViewSelectedPropThread(MainWindow=MainWindow)
+        self.props_watch_button.clicked.connect(self.view_selected_prop_thread.start)
+        # Remove Selected Prop
+        self.remove_selected_prop_thread = RemoveSelectedPropThread(MainWindow=MainWindow)
+        self.props_remove_button.clicked.connect(self.remove_selected_prop_thread.start)
+        # Rotate Left Prop
+        self.prop_rotate_left_thread = PropRotateLeftThread(MainWindow=MainWindow)
+        self.props_rotate_left_button.clicked.connect(self.prop_rotate_left_thread.start)
+        # Rotate Right Prop
+        self.prop_rotate_right_thread = PropRotateRightThread(MainWindow=MainWindow)
+        self.props_rotate_right_button.clicked.connect(self.prop_rotate_right_thread.start)
 
         # --------------------------- VEHICLE
         # Generate Vehicles
@@ -1093,6 +1170,12 @@ class Ui_MainWindow(object):
         # Remove All Vehicles
         self.remove_all_vehicles_thread = RemoveAllVehiclesThread(MainWindow=MainWindow)
         self.remove_all_vehicles_button.clicked.connect(self.remove_all_vehicles)
+        # View Selected Vehicle
+        self.view_selected_vehicle_thread = ViewSelectedVehicleThread(MainWindow=MainWindow)
+        self.vehicle_watch_button.clicked.connect(self.view_selected_vehicle_thread.start)
+        # Remove Selected Vehicle
+        self.remove_selected_vehicle_thread = RemoveSelectedVehicleThread(MainWindow=MainWindow)
+        self.vehicle_remove_button.clicked.connect(self.remove_selected_vehicle_thread.start)
 
         # --------------------------- WALKER
         # Generate Walkers
@@ -1104,6 +1187,12 @@ class Ui_MainWindow(object):
         # Remove All Walkers
         self.remove_all_walkers_thread = RemoveAllWalkersThread(MainWindow=MainWindow)
         self.remove_all_walkers_button.clicked.connect(self.remove_all_walkers)
+        # View Selected Walker
+        self.view_selected_walker_thread = ViewSelectedWalkerThread(MainWindow=MainWindow)
+        self.walker_watch_button.clicked.connect(self.view_selected_walker_thread.start)
+        # Remove Selected Walker
+        self.remove_selected_walker_thread = RemoveSelectedWalkerThread(MainWindow=MainWindow)
+        self.walker_remove_button.clicked.connect(self.remove_selected_walker_thread.start)
 
         # --------------------------- WEATHER
         # Fog None
@@ -1168,7 +1257,7 @@ class Ui_MainWindow(object):
           self.generate_walkers_thread.terminate()
         
         self.remove_all_walkers_thread.start()
-
+    
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "事故场景生成原型系统"))
@@ -1179,12 +1268,18 @@ class Ui_MainWindow(object):
         self.label_11.setText(_translate("MainWindow", "地图"))
         self.label_21.setText(_translate("MainWindow", "地图列表"))
         self.load_map_button.setText(_translate("MainWindow", "加载"))
+        self.reload_world_button.setText(_translate("MainWindow", "重启"))
         self.label_12.setText(_translate("MainWindow", "当前地图："))
         self.current_map_label.setText(_translate("MainWindow", "None"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabWidgetPage1), _translate("MainWindow", "地图"))
         self.label_9.setText(_translate("MainWindow", "障碍物"))
-        self.label_10.setText(_translate("MainWindow", "障碍物列表"))
+        self.label_13.setText(_translate("MainWindow", "障碍物列表"))
+        self.label_10.setText(_translate("MainWindow", "现有障碍物"))
         self.prop_generate_button.setText(_translate("MainWindow", "生成"))
+        self.props_watch_button.setText(_translate("MainWindow", "查看"))
+        self.props_rotate_left_button.setText(_translate("MainWindow", "左转"))
+        self.props_rotate_right_button.setText(_translate("MainWindow", "右转"))
+        self.props_remove_button.setText(_translate("MainWindow", "移除"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "障碍物"))
         self.label_7.setText(_translate("MainWindow", "车辆"))
         self.label_8.setText(_translate("MainWindow", "生成/移除车辆"))
@@ -1195,8 +1290,8 @@ class Ui_MainWindow(object):
         self.label_3.setText(_translate("MainWindow", "车辆数量："))
         self.vehicle_count_label.setText(_translate("MainWindow", "0"))
         self.vehicle_watch_button.setText(_translate("MainWindow", "查看"))
-        self.vehicle_control_button.setText(_translate("MainWindow", "控制"))
         self.vehicle_remove_button.setText(_translate("MainWindow", "移除"))
+        self.vehicle_generate_control_button.setText(_translate("MainWindow", "生成控制车辆"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "车辆"))
         self.label_16.setText(_translate("MainWindow", "行人"))
         self.label_17.setText(_translate("MainWindow", "生成/移除行人"))

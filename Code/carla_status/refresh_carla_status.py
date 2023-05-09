@@ -27,6 +27,9 @@ def main():
         output += ','
         
         for static_prop in static_props:
+          if "helmet" in static_prop.id:
+            output = output
+          else:
             output += static_prop.id + ' '
         
         print(output)
