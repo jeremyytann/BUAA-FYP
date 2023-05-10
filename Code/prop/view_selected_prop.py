@@ -16,7 +16,6 @@ world = client.get_world()
 try:
   prop = world.get_actor(prop_id)
 
-  # Set the spectator view to the prop's location and rotation
   spectator = world.get_spectator()
   prop_transform = prop.get_transform()
   prop_transform.location.x += 3

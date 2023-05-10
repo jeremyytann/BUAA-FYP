@@ -16,7 +16,6 @@ world = client.get_world()
 try:
   walker = world.get_actor(walker_id)
 
-  # Set the spectator view to the walker's location and rotation
   spectator = world.get_spectator()
   walker_transform = walker.get_transform()
   walker_transform.location.x += 3

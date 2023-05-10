@@ -16,7 +16,6 @@ world = client.get_world()
 try:
   vehicle = world.get_actor(vehicle_id)
 
-  # Set the spectator view to the vehicle's location and rotation
   spectator = world.get_spectator()
   vehicle_transform = vehicle.get_transform()
   vehicle_transform.location.z += 3
