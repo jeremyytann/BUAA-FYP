@@ -53,3 +53,5 @@ class GeneratePropThread(QThread):
         self.MainWindow.ui.existing_props_list_widget.addItem(output)
       except KeyboardInterrupt:
         pass
+      finally:
+        os.remove("generate_prop_script.py")
